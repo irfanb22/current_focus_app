@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CompletionScreen from './CompletionScreen';
 
 interface TimerScreenProps {
   initialMinutes: number;
@@ -8,6 +9,8 @@ interface TimerScreenProps {
 const TimerScreen: React.FC<TimerScreenProps> = ({ initialMinutes, onQuit }) => {
   const [totalSeconds, setTotalSeconds] = useState(initialMinutes * 60);
   const [isRunning, setIsRunning] = useState(true);
+  const [showCompletion, setShowCompletion] = useState(false);
+  const [originalMinutes, setOriginalMinutes] = useState(initialMinutes);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -43,11 +46,34 @@ const TimerScreen: React.FC<TimerScreenProps> = ({ initialMinutes, onQuit }) => 
 
   // Handle timer completion
   useEffect(() => {
-    if (totalSeconds === 0) {
+    if (totalSeconds === 0 && !showCompletion) {
       setIsRunning(false);
-      // TODO: Show completion options in next iteration
+      setShowCompletion(true);
     }
-  }, [totalSeconds]);
+  }, [totalSeconds, showCompletion]);
+
+  // Handle completion screen actions
+  const handleEndSession = () => {
+    onQuit();
+  };
+
+  const handleAdd20Minutes = () => {
+    setShowCompletion(false);
+    setTotalSeconds(20 * 60); // 20 minutes in seconds
+    setOriginalMinutes(20);
+    setIsRunning(true);
+  };
+
+  // Show completion screen when timer is done
+  if (showCompletion) {
+    return (
+      <CompletionScreen
+        focusedMinutes={originalMinutes}
+        onEndSession={handleEndSession}
+        onAdd20Minutes={handleAdd20Minutes}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
