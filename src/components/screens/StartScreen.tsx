@@ -1,9 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TimerScreen from './TimerScreen';
 
 const StartScreen: React.FC = () => {
+  const [showTimer, setShowTimer] = useState(false);
+  const [selectedMinutes, setSelectedMinutes] = useState(0);
+
   const handleTimerSelect = (duration: string) => {
-    alert(`Selected: ${duration}`);
+    let minutes: number;
+    
+    switch (duration) {
+      case '5 minutes':
+        minutes = 5;
+        break;
+      case '30 minutes':
+        minutes = 30;
+        break;
+      case '60 minutes':
+        minutes = 60;
+        break;
+      case '90 minutes':
+        minutes = 90;
+        break;
+      case 'Just Start':
+        minutes = 25; // Default to 25 minutes for "Just Start"
+        break;
+      default:
+        minutes = 25;
+    }
+    
+    setSelectedMinutes(minutes);
+    setShowTimer(true);
   };
+
+  const handleQuitTimer = () => {
+    setShowTimer(false);
+    setSelectedMinutes(0);
+  };
+
+  // Show timer screen if timer is active
+  if (showTimer) {
+    return (
+      <TimerScreen 
+        initialMinutes={selectedMinutes}
+        onQuit={handleQuitTimer}
+      />
+    );
+  }
 
   const timerOptions = [
     { label: '5 minutes', value: '5 minutes' },
