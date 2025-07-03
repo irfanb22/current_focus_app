@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 interface IntentionScreenProps {
   onContinue: (intention: string) => void;
+  onJustStart: (intention: string) => void;
 }
 
-const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue }) => {
+const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue, onJustStart }) => {
   const [intention, setIntention] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -14,6 +15,10 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue }) => {
 
   const handleContinue = () => {
     onContinue(intention.trim());
+  };
+
+  const handleJustStart = () => {
+    onJustStart(intention.trim());
   };
 
   return (
@@ -30,7 +35,7 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue }) => {
         </div>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <textarea
               value={intention}
@@ -47,13 +52,24 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue }) => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleContinue}
-            className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
-          >
-            Continue
-          </button>
+          {/* Action Buttons */}
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={handleContinue}
+              className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
+            >
+              Continue
+            </button>
+            
+            <button
+              type="button"
+              onClick={handleJustStart}
+              className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-background text-text-primary border-primary hover:bg-primary hover:text-white transition-all duration-200"
+            >
+              Just Start (25 min)
+            </button>
+          </div>
         </form>
 
         {/* Skip Option */}

@@ -62,12 +62,22 @@ function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    setShowIntention(true);
+    // Only show intention screen if no timer is active
+    if (!timerState.isActive) {
+      setShowIntention(true);
+    }
   };
 
   const handleIntentionComplete = (intention: string) => {
     setUserIntention(intention);
     setShowIntention(false);
+  };
+
+  const handleIntentionJustStart = (intention: string) => {
+    setUserIntention(intention);
+    setShowIntention(false);
+    // Immediately start a 25-minute timer
+    handleStartTimer(25);
   };
 
   const handleStartTimer = (minutes: number) => {
@@ -99,9 +109,14 @@ function App() {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
-  // Show intention screen after splash
+  // Show intention screen after splash (only if no active timer)
   if (showIntention) {
-    return <IntentionScreen onContinue={handleIntentionComplete} />;
+    return (
+      <IntentionScreen 
+        onContinue={handleIntentionComplete}
+        onJustStart={handleIntentionJustStart}
+      />
+    );
   }
 
   const renderScreen = () => {
