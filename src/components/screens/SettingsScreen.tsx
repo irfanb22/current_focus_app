@@ -1,21 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const SettingsScreen: React.FC = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [defaultTimer, setDefaultTimer] = useState('25');
+
+  const ToggleSwitch: React.FC<{
+    enabled: boolean;
+    onToggle: () => void;
+  }> = ({ enabled, onToggle }) => (
+    <button
+      onClick={onToggle}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none ${
+        enabled ? 'bg-primary' : 'bg-background-alt'
+      }`}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+          enabled ? 'translate-x-6' : 'translate-x-1'
+        }`}
+      />
+    </button>
+  );
+
+  const timerOptions = [
+    { value: '5', label: '5 minutes' },
+    { value: '25', label: '25 minutes' },
+    { value: '30', label: '30 minutes' },
+    { value: '60', label: '60 minutes' },
+    { value: '90', label: '90 minutes' },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="px-6 py-8">
-        <h1 className="text-2xl font-bold text-text-primary mb-6">Settings</h1>
+        <h1 className="text-2xl font-bold text-text-primary mb-8">Settings</h1>
         
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <div className="text-gray-400 mb-4">
-              <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+        <div className="space-y-6">
+          {/* Appearance Setting */}
+          <div className="flex items-center justify-between py-4 border-b border-background-alt">
+            <div className="flex-1">
+              <h3 className="text-lg font-medium text-text-primary mb-1">
+                Appearance
+              </h3>
+              <p className="text-sm text-gray-500">
+                {darkMode ? 'Dark mode' : 'Light mode'}
+              </p>
             </div>
-            <p className="text-gray-600 text-lg">App Settings</p>
-            <p className="text-gray-400 text-sm mt-2">Configuration options will be available here</p>
+            <ToggleSwitch
+              enabled={darkMode}
+              onToggle={() => setDarkMode(!darkMode)}
+            />
+          </div>
+
+          {/* Default Timer Setting */}
+          <div className="py-4 border-b border-background-alt">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="text-lg font-medium text-text-primary mb-1">
+                  Default Timer
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Default duration for "Just Start"
+                </p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {timerOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setDefaultTimer(option.value)}
+                  className={`py-3 px-4 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                    defaultTimer === option.value
+                      ? 'bg-primary text-white border-primary'
+                      : 'bg-background text-text-primary border-background-alt hover:border-primary'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sound Setting */}
+          <div className="flex items-center justify-between py-4 border-b border-background-alt">
+            <div className="flex-1">
+              <h3 className="text-lg font-medium text-text-primary mb-1">
+                Sound
+              </h3>
+              <p className="text-sm text-gray-500">
+                {soundEnabled ? 'Notifications enabled' : 'Notifications disabled'}
+              </p>
+            </div>
+            <ToggleSwitch
+              enabled={soundEnabled}
+              onToggle={() => setSoundEnabled(!soundEnabled)}
+            />
+          </div>
+        </div>
+
+        {/* App Info */}
+        <div className="mt-12 pt-8 border-t border-background-alt">
+          <div className="text-center">
+            <h2 className="text-lg font-semibold text-text-primary mb-2">Current</h2>
+            <p className="text-sm text-gray-500 mb-1">A zen focus timer</p>
+            <p className="text-xs text-gray-400">Version 1.0.0</p>
           </div>
         </div>
       </div>
