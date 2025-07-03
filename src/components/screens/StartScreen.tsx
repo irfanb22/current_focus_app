@@ -7,13 +7,15 @@ interface StartScreenProps {
   onStartTimer: (minutes: number) => void;
   onUpdateTimer: (updates: Partial<TimerState>) => void;
   onEndTimer: () => void;
+  userIntention: string;
 }
 
 const StartScreen: React.FC<StartScreenProps> = ({ 
   timerState, 
   onStartTimer, 
   onUpdateTimer, 
-  onEndTimer 
+  onEndTimer,
+  userIntention
 }) => {
   const handleTimerSelect = (duration: string) => {
     let minutes: number;
@@ -48,6 +50,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
         timerState={timerState}
         onUpdateTimer={onUpdateTimer}
         onEndTimer={onEndTimer}
+        userIntention={userIntention}
       />
     );
   }
@@ -64,6 +67,16 @@ const StartScreen: React.FC<StartScreenProps> = ({
     <div className="min-h-screen bg-background">
       <div className="px-6 py-8">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+          {/* Show intention if set */}
+          {userIntention && (
+            <div className="mb-8 text-center">
+              <p className="text-gray-500 text-sm mb-2">Your focus:</p>
+              <p className="text-lg text-text-primary font-medium italic">
+                "{userIntention}"
+              </p>
+            </div>
+          )}
+          
           <h1 className="text-3xl font-bold text-text-primary mb-12 text-center">
             Ready to Focus
           </h1>

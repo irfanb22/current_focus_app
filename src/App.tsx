@@ -4,6 +4,7 @@ import MySessionsScreen from './components/screens/MySessionsScreen';
 import StartScreen from './components/screens/StartScreen';
 import SettingsScreen from './components/screens/SettingsScreen';
 import SplashScreen from './components/screens/SplashScreen';
+import IntentionScreen from './components/screens/IntentionScreen';
 
 export type TabType = 'sessions' | 'start' | 'settings';
 
@@ -18,6 +19,8 @@ export interface TimerState {
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('start');
   const [showSplash, setShowSplash] = useState(true);
+  const [showIntention, setShowIntention] = useState(false);
+  const [userIntention, setUserIntention] = useState('');
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     totalSeconds: 0,
@@ -59,6 +62,12 @@ function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
+    setShowIntention(true);
+  };
+
+  const handleIntentionComplete = (intention: string) => {
+    setUserIntention(intention);
+    setShowIntention(false);
   };
 
   const handleStartTimer = (minutes: number) => {
@@ -90,6 +99,11 @@ function App() {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
+  // Show intention screen after splash
+  if (showIntention) {
+    return <IntentionScreen onContinue={handleIntentionComplete} />;
+  }
+
   const renderScreen = () => {
     switch (activeTab) {
       case 'sessions':
@@ -101,6 +115,7 @@ function App() {
             onStartTimer={handleStartTimer}
             onUpdateTimer={handleUpdateTimer}
             onEndTimer={handleEndTimer}
+            userIntention={userIntention}
           />
         );
       case 'settings':
@@ -112,6 +127,7 @@ function App() {
             onStartTimer={handleStartTimer}
             onUpdateTimer={handleUpdateTimer}
             onEndTimer={handleEndTimer}
+            userIntention={userIntention}
           />
         );
     }

@@ -6,12 +6,14 @@ interface TimerScreenProps {
   timerState: TimerState;
   onUpdateTimer: (updates: Partial<TimerState>) => void;
   onEndTimer: () => void;
+  userIntention: string;
 }
 
 const TimerScreen: React.FC<TimerScreenProps> = ({ 
   timerState, 
   onUpdateTimer, 
-  onEndTimer 
+  onEndTimer,
+  userIntention
 }) => {
   const { totalSeconds, isRunning, originalMinutes, showCompletion } = timerState;
 
@@ -54,6 +56,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
         focusedMinutes={originalMinutes}
         onEndSession={handleEndSession}
         onAdd20Minutes={handleAdd20Minutes}
+        userIntention={userIntention}
       />
     );
   }
@@ -61,6 +64,16 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-6">
+        {/* Show intention if set */}
+        {userIntention && (
+          <div className="mb-8 text-center">
+            <p className="text-gray-500 text-sm mb-2">Focusing on:</p>
+            <p className="text-lg text-text-primary font-medium italic">
+              "{userIntention}"
+            </p>
+          </div>
+        )}
+
         {/* Timer Display */}
         <div className="text-center mb-16">
           <div className="text-8xl font-bold text-text-primary mb-4 font-mono tracking-wider">

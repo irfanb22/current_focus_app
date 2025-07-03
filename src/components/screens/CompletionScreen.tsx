@@ -5,12 +5,14 @@ interface CompletionScreenProps {
   focusedMinutes: number;
   onEndSession: () => void;
   onAdd20Minutes: () => void;
+  userIntention: string;
 }
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ 
   focusedMinutes, 
   onEndSession, 
-  onAdd20Minutes 
+  onAdd20Minutes,
+  userIntention
 }) => {
   return (
     <div className="min-h-screen bg-success flex flex-col">
@@ -25,13 +27,23 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({
         </div>
 
         {/* Congratulatory Message */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-text-primary mb-6">
             Session Complete!
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 mb-4">
             You focused for <span className="font-semibold text-text-primary">{focusedMinutes} minutes</span>
           </p>
+          
+          {/* Show completed intention */}
+          {userIntention && (
+            <div className="mt-6 p-4 bg-white bg-opacity-50 rounded-lg">
+              <p className="text-gray-600 text-sm mb-1">You focused on:</p>
+              <p className="text-lg text-text-primary font-medium italic">
+                "{userIntention}"
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
