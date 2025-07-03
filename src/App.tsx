@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import MySessionsScreen from './components/screens/MySessionsScreen';
 import StartScreen from './components/screens/StartScreen';
@@ -25,6 +25,37 @@ function App() {
     originalMinutes: 0,
     showCompletion: false,
   });
+
+  // Timer logic runs at App level - continues regardless of active tab
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (timerState.isActive && timerState.isRunning && timerState.totalSeconds > 0) {
+      interval = setInterval(() => {
+        setTimerState(prev => ({
+          ...prev,
+          totalSeconds: prev.totalSeconds - 1
+        }));
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timerState.isActive, timerState.isRunning, timerState.totalSeconds]);
+
+  // Handle timer completion at App level
+  useEffect(() => {
+    if (timerState.isActive && timerState.totalSeconds === 0 && !timerState.showCompletion) {
+      setTimerState(prev => ({
+        ...prev,
+        isRunning: false,
+        showCompletion: true
+      }));
+      // Auto-navigate to Start tab when timer completes
+      setActiveTab('start');
+    }
+  }, [timerState.isActive, timerState.totalSeconds, timerState.showCompletion]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);

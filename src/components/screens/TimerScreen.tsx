@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CompletionScreen from './CompletionScreen';
 import { TimerState } from '../../App';
 
@@ -14,20 +14,6 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   onEndTimer 
 }) => {
   const { totalSeconds, isRunning, originalMinutes, showCompletion } = timerState;
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isRunning && totalSeconds > 0) {
-      interval = setInterval(() => {
-        onUpdateTimer({ totalSeconds: totalSeconds - 1 });
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isRunning, totalSeconds, onUpdateTimer]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -46,13 +32,6 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   const handleQuit = () => {
     onEndTimer();
   };
-
-  // Handle timer completion
-  useEffect(() => {
-    if (totalSeconds === 0 && !showCompletion) {
-      onUpdateTimer({ isRunning: false, showCompletion: true });
-    }
-  }, [totalSeconds, showCompletion, onUpdateTimer]);
 
   // Handle completion screen actions
   const handleEndSession = () => {
