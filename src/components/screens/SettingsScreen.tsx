@@ -2,9 +2,9 @@ import React from 'react';
 
 const SettingsScreen: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="px-6 py-8">
-        <h1 className="text-2xl font-bold text-black mb-6">Settings</h1>
+        <h1 className="text-2xl font-bold text-text-primary mb-6">Settings</h1>
         
         <div className="flex items-center justify-center h-96">
           <div className="text-center">

@@ -61,10 +61,10 @@ const StartScreen: React.FC<StartScreenProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="px-6 py-8">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
-          <h1 className="text-3xl font-bold text-black mb-12 text-center">
+          <h1 className="text-3xl font-bold text-text-primary mb-12 text-center">
             Ready to Focus
           </h1>
           
@@ -75,8 +75,8 @@ const StartScreen: React.FC<StartScreenProps> = ({
                 onClick={() => handleTimerSelect(option.value)}
                 className={`w-full py-4 px-6 text-lg font-medium rounded-lg border-2 transition-all duration-200 ${
                   option.isOutlined
-                    ? 'bg-white text-black border-black hover:bg-black hover:text-white'
-                    : 'bg-white text-black border-black hover:bg-gray-50'
+                    ? 'bg-background text-text-primary border-primary hover:bg-primary hover:text-white'
+                    : 'bg-background text-text-primary border-background-alt hover:bg-background-alt'
                 }`}
               >
                 {option.label}

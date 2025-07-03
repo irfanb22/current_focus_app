@@ -28,7 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, hasActi
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-background-alt">
       <div className="flex items-center justify-around py-2">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -42,14 +42,14 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, hasActi
               onClick={() => onTabChange(tab.id)}
               className={`relative flex flex-col items-center py-2 px-4 transition-colors duration-200 ${
                 isActive 
-                  ? 'text-black' 
-                  : 'text-gray-400 hover:text-gray-600'
+                  ? 'text-primary' 
+                  : 'text-gray-400 hover:text-text-primary'
               }`}
             >
               <div className="relative">
                 <Icon size={24} className="mb-1" />
                 {showTimerIndicator && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-black rounded-full animate-pulse"></div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse"></div>
                 )}
               </div>
               <span className="text-xs font-medium">{tab.label}</span>

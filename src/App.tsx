@@ -118,7 +118,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Main Content Area */}
       <div className="flex-1 pb-20">
         {renderScreen()}
