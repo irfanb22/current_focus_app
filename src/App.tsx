@@ -7,12 +7,51 @@ import SplashScreen from './components/screens/SplashScreen';
 
 export type TabType = 'sessions' | 'start' | 'settings';
 
+export interface TimerState {
+  isActive: boolean;
+  totalSeconds: number;
+  isRunning: boolean;
+  originalMinutes: number;
+  showCompletion: boolean;
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('start');
   const [showSplash, setShowSplash] = useState(true);
+  const [timerState, setTimerState] = useState<TimerState>({
+    isActive: false,
+    totalSeconds: 0,
+    isRunning: false,
+    originalMinutes: 0,
+    showCompletion: false,
+  });
 
   const handleSplashComplete = () => {
     setShowSplash(false);
+  };
+
+  const handleStartTimer = (minutes: number) => {
+    setTimerState({
+      isActive: true,
+      totalSeconds: minutes * 60,
+      isRunning: true,
+      originalMinutes: minutes,
+      showCompletion: false,
+    });
+  };
+
+  const handleUpdateTimer = (updates: Partial<TimerState>) => {
+    setTimerState(prev => ({ ...prev, ...updates }));
+  };
+
+  const handleEndTimer = () => {
+    setTimerState({
+      isActive: false,
+      totalSeconds: 0,
+      isRunning: false,
+      originalMinutes: 0,
+      showCompletion: false,
+    });
   };
 
   // Show splash screen first
@@ -25,11 +64,25 @@ function App() {
       case 'sessions':
         return <MySessionsScreen />;
       case 'start':
-        return <StartScreen />;
+        return (
+          <StartScreen 
+            timerState={timerState}
+            onStartTimer={handleStartTimer}
+            onUpdateTimer={handleUpdateTimer}
+            onEndTimer={handleEndTimer}
+          />
+        );
       case 'settings':
         return <SettingsScreen />;
       default:
-        return <StartScreen />;
+        return (
+          <StartScreen 
+            timerState={timerState}
+            onStartTimer={handleStartTimer}
+            onUpdateTimer={handleUpdateTimer}
+            onEndTimer={handleEndTimer}
+          />
+        );
     }
   };
 
@@ -41,7 +94,11 @@ function App() {
       </div>
       
       {/* Bottom Navigation */}
-      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+      <Navigation 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab}
+        hasActiveTimer={timerState.isActive}
+      />
     </div>
   );
 }

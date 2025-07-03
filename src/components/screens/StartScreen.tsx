@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TimerScreen from './TimerScreen';
+import { TimerState } from '../../App';
 
-const StartScreen: React.FC = () => {
-  const [showTimer, setShowTimer] = useState(false);
-  const [selectedMinutes, setSelectedMinutes] = useState(0);
+interface StartScreenProps {
+  timerState: TimerState;
+  onStartTimer: (minutes: number) => void;
+  onUpdateTimer: (updates: Partial<TimerState>) => void;
+  onEndTimer: () => void;
+}
 
+const StartScreen: React.FC<StartScreenProps> = ({ 
+  timerState, 
+  onStartTimer, 
+  onUpdateTimer, 
+  onEndTimer 
+}) => {
   const handleTimerSelect = (duration: string) => {
     let minutes: number;
     
@@ -28,21 +38,16 @@ const StartScreen: React.FC = () => {
         minutes = 25;
     }
     
-    setSelectedMinutes(minutes);
-    setShowTimer(true);
-  };
-
-  const handleQuitTimer = () => {
-    setShowTimer(false);
-    setSelectedMinutes(0);
+    onStartTimer(minutes);
   };
 
   // Show timer screen if timer is active
-  if (showTimer) {
+  if (timerState.isActive) {
     return (
       <TimerScreen 
-        initialMinutes={selectedMinutes}
-        onQuit={handleQuitTimer}
+        timerState={timerState}
+        onUpdateTimer={onUpdateTimer}
+        onEndTimer={onEndTimer}
       />
     );
   }

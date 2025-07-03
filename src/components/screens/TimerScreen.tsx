@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CompletionScreen from './CompletionScreen';
+import { TimerState } from '../../App';
 
 interface TimerScreenProps {
-  initialMinutes: number;
-  onQuit: () => void;
+  timerState: TimerState;
+  onUpdateTimer: (updates: Partial<TimerState>) => void;
+  onEndTimer: () => void;
 }
 
-const TimerScreen: React.FC<TimerScreenProps> = ({ initialMinutes, onQuit }) => {
-  const [totalSeconds, setTotalSeconds] = useState(initialMinutes * 60);
-  const [isRunning, setIsRunning] = useState(true);
-  const [showCompletion, setShowCompletion] = useState(false);
-  const [originalMinutes, setOriginalMinutes] = useState(initialMinutes);
+const TimerScreen: React.FC<TimerScreenProps> = ({ 
+  timerState, 
+  onUpdateTimer, 
+  onEndTimer 
+}) => {
+  const { totalSeconds, isRunning, originalMinutes, showCompletion } = timerState;
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isRunning && totalSeconds > 0) {
       interval = setInterval(() => {
-        setTotalSeconds(prev => prev - 1);
+        onUpdateTimer({ totalSeconds: totalSeconds - 1 });
       }, 1000);
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isRunning, totalSeconds]);
+  }, [isRunning, totalSeconds, onUpdateTimer]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -33,35 +36,36 @@ const TimerScreen: React.FC<TimerScreenProps> = ({ initialMinutes, onQuit }) => 
   };
 
   const handlePauseResume = () => {
-    setIsRunning(!isRunning);
+    onUpdateTimer({ isRunning: !isRunning });
   };
 
   const handleAdd15Minutes = () => {
-    setTotalSeconds(prev => prev + (15 * 60));
+    onUpdateTimer({ totalSeconds: totalSeconds + (15 * 60) });
   };
 
   const handleQuit = () => {
-    onQuit();
+    onEndTimer();
   };
 
   // Handle timer completion
   useEffect(() => {
     if (totalSeconds === 0 && !showCompletion) {
-      setIsRunning(false);
-      setShowCompletion(true);
+      onUpdateTimer({ isRunning: false, showCompletion: true });
     }
-  }, [totalSeconds, showCompletion]);
+  }, [totalSeconds, showCompletion, onUpdateTimer]);
 
   // Handle completion screen actions
   const handleEndSession = () => {
-    onQuit();
+    onEndTimer();
   };
 
   const handleAdd20Minutes = () => {
-    setShowCompletion(false);
-    setTotalSeconds(20 * 60); // 20 minutes in seconds
-    setOriginalMinutes(20);
-    setIsRunning(true);
+    onUpdateTimer({
+      showCompletion: false,
+      totalSeconds: 20 * 60,
+      originalMinutes: 20,
+      isRunning: true,
+    });
   };
 
   // Show completion screen when timer is done

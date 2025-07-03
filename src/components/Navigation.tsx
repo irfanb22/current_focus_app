@@ -5,9 +5,10 @@ import { TabType } from '../App';
 interface NavigationProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
+  hasActiveTimer: boolean;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
+const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, hasActiveTimer }) => {
   const tabs = [
     {
       id: 'sessions' as TabType,
@@ -32,18 +33,25 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
+          const isStartTab = tab.id === 'start';
+          const showTimerIndicator = isStartTab && hasActiveTimer;
           
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center py-2 px-4 transition-colors duration-200 ${
+              className={`relative flex flex-col items-center py-2 px-4 transition-colors duration-200 ${
                 isActive 
                   ? 'text-black' 
                   : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <Icon size={24} className="mb-1" />
+              <div className="relative">
+                <Icon size={24} className="mb-1" />
+                {showTimerIndicator && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-black rounded-full animate-pulse"></div>
+                )}
+              </div>
               <span className="text-xs font-medium">{tab.label}</span>
             </button>
           );
