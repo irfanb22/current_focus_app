@@ -19,7 +19,6 @@ export interface TimerState {
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('start');
   const [showSplash, setShowSplash] = useState(true);
-  const [showIntention, setShowIntention] = useState(false);
   const [userIntention, setUserIntention] = useState('');
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
@@ -62,20 +61,14 @@ function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    // Only show intention screen if no timer is active
-    if (!timerState.isActive) {
-      setShowIntention(true);
-    }
   };
 
   const handleIntentionComplete = (intention: string) => {
     setUserIntention(intention);
-    setShowIntention(false);
   };
 
   const handleIntentionJustStart = (intention: string) => {
     setUserIntention(intention);
-    setShowIntention(false);
     // Immediately start a 25-minute timer
     handleStartTimer(25);
   };
@@ -102,6 +95,8 @@ function App() {
       originalMinutes: 0,
       showCompletion: false,
     });
+    // Clear the intention when ending a timer session
+    setUserIntention('');
   };
 
   // Show splash screen first
@@ -109,21 +104,21 @@ function App() {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
-  // Show intention screen after splash (only if no active timer)
-  if (showIntention) {
-    return (
-      <IntentionScreen 
-        onContinue={handleIntentionComplete}
-        onJustStart={handleIntentionJustStart}
-      />
-    );
-  }
-
   const renderScreen = () => {
     switch (activeTab) {
       case 'sessions':
         return <MySessionsScreen />;
       case 'start':
+        // Always show intention screen when no timer is active
+        if (!timerState.isActive) {
+          return (
+            <IntentionScreen 
+              onContinue={handleIntentionComplete}
+              onJustStart={handleIntentionJustStart}
+            />
+          );
+        }
+        // Show timer/start screen when timer is active
         return (
           <StartScreen 
             timerState={timerState}
@@ -136,6 +131,15 @@ function App() {
       case 'settings':
         return <SettingsScreen />;
       default:
+        // Default case - same logic as 'start'
+        if (!timerState.isActive) {
+          return (
+            <IntentionScreen 
+              onContinue={handleIntentionComplete}
+              onJustStart={handleIntentionJustStart}
+            />
+          );
+        }
         return (
           <StartScreen 
             timerState={timerState}
