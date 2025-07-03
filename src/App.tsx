@@ -20,6 +20,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('start');
   const [showSplash, setShowSplash] = useState(true);
   const [userIntention, setUserIntention] = useState('');
+  const [showTimerSelection, setShowTimerSelection] = useState(false);
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     totalSeconds: 0,
@@ -65,6 +66,7 @@ function App() {
 
   const handleIntentionComplete = (intention: string) => {
     setUserIntention(intention);
+    setShowTimerSelection(true);
   };
 
   const handleIntentionJustStart = (intention: string) => {
@@ -81,6 +83,7 @@ function App() {
       originalMinutes: minutes,
       showCompletion: false,
     });
+    setShowTimerSelection(false);
   };
 
   const handleUpdateTimer = (updates: Partial<TimerState>) => {
@@ -95,8 +98,9 @@ function App() {
       originalMinutes: 0,
       showCompletion: false,
     });
-    // Clear the intention when ending a timer session
+    // Clear the intention and timer selection state when ending a timer session
     setUserIntention('');
+    setShowTimerSelection(false);
   };
 
   // Show splash screen first
@@ -109,44 +113,67 @@ function App() {
       case 'sessions':
         return <MySessionsScreen />;
       case 'start':
-        // Always show intention screen when no timer is active
-        if (!timerState.isActive) {
+        // Show timer screen if timer is active
+        if (timerState.isActive) {
           return (
-            <IntentionScreen 
-              onContinue={handleIntentionComplete}
-              onJustStart={handleIntentionJustStart}
+            <StartScreen 
+              timerState={timerState}
+              onStartTimer={handleStartTimer}
+              onUpdateTimer={handleUpdateTimer}
+              onEndTimer={handleEndTimer}
+              userIntention={userIntention}
             />
           );
         }
-        // Show timer/start screen when timer is active
+        // Show timer selection screen if user has completed intention
+        if (showTimerSelection) {
+          return (
+            <StartScreen 
+              timerState={timerState}
+              onStartTimer={handleStartTimer}
+              onUpdateTimer={handleUpdateTimer}
+              onEndTimer={handleEndTimer}
+              userIntention={userIntention}
+            />
+          );
+        }
+        // Default: show intention screen when no timer is active
         return (
-          <StartScreen 
-            timerState={timerState}
-            onStartTimer={handleStartTimer}
-            onUpdateTimer={handleUpdateTimer}
-            onEndTimer={handleEndTimer}
-            userIntention={userIntention}
+          <IntentionScreen 
+            onContinue={handleIntentionComplete}
+            onJustStart={handleIntentionJustStart}
           />
         );
       case 'settings':
         return <SettingsScreen />;
       default:
         // Default case - same logic as 'start'
-        if (!timerState.isActive) {
+        if (timerState.isActive) {
           return (
-            <IntentionScreen 
-              onContinue={handleIntentionComplete}
-              onJustStart={handleIntentionJustStart}
+            <StartScreen 
+              timerState={timerState}
+              onStartTimer={handleStartTimer}
+              onUpdateTimer={handleUpdateTimer}
+              onEndTimer={handleEndTimer}
+              userIntention={userIntention}
+            />
+          );
+        }
+        if (showTimerSelection) {
+          return (
+            <StartScreen 
+              timerState={timerState}
+              onStartTimer={handleStartTimer}
+              onUpdateTimer={handleUpdateTimer}
+              onEndTimer={handleEndTimer}
+              userIntention={userIntention}
             />
           );
         }
         return (
-          <StartScreen 
-            timerState={timerState}
-            onStartTimer={handleStartTimer}
-            onUpdateTimer={handleUpdateTimer}
-            onEndTimer={handleEndTimer}
-            userIntention={userIntention}
+          <IntentionScreen 
+            onContinue={handleIntentionComplete}
+            onJustStart={handleIntentionJustStart}
           />
         );
     }
