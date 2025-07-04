@@ -34,7 +34,7 @@ function App() {
 
   // Initialize audio on component mount
   useEffect(() => {
-    audioRef.current = new Audio('/sounds/chime_current_end.mp3');
+    audioRef.current = new Audio('/sounds/chime_current_end.wav');
   }, []);
 
   // Timer logic runs at App level - continues regardless of active tab
