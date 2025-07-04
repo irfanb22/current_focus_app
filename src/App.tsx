@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navigation from './components/Navigation';
 import MySessionsScreen from './components/screens/MySessionsScreen';
 import StartScreen from './components/screens/StartScreen';
@@ -29,6 +29,14 @@ function App() {
     showCompletion: false,
   });
 
+  // Audio reference for completion chime
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio on component mount
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/chime_current_end.mp3');
+  }, []);
+
   // Timer logic runs at App level - continues regardless of active tab
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -55,6 +63,18 @@ function App() {
         isRunning: false,
         showCompletion: true
       }));
+      
+      // Play completion chime
+      if (audioRef.current) {
+        try {
+          audioRef.current.play().catch(error => {
+            console.log('Audio playback failed:', error);
+          });
+        } catch (error) {
+          console.log('Audio playback error:', error);
+        }
+      }
+      
       // Auto-navigate to Start tab when timer completes
       setActiveTab('start');
     }
