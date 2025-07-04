@@ -67,7 +67,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
         {/* Show intention if set */}
         {userIntention && (
           <div className="mb-8 text-center">
-            <p className="text-gray-500 text-sm mb-2">Focusing on:</p>
+            <p className="text-gray-500 text-sm mb-2">Current focus:</p>
             <p className="text-lg text-text-primary font-medium italic">
               "{userIntention}"
             </p>
