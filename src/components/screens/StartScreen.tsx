@@ -56,10 +56,10 @@ const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   const timerOptions = [
-    { label: '5 minutes', value: '5 minutes' },
-    { label: '30 minutes', value: '30 minutes' },
-    { label: '60 minutes', value: '60 minutes' },
-    { label: '75 minutes', value: '75 minutes' },
+    { label: '5 minutes', value: '5 minutes', subtitle: 'Small step' },
+    { label: '30 minutes', value: '30 minutes', subtitle: 'Find your flow' },
+    { label: '60 minutes', value: '60 minutes', subtitle: 'Deep focus' },
+    { label: '75 minutes', value: '75 minutes', subtitle: 'Flow state' },
     { label: 'Just Start', value: 'Just Start', isOutlined: true },
   ];
 
@@ -92,7 +92,16 @@ const StartScreen: React.FC<StartScreenProps> = ({
                     : 'bg-background text-text-primary border-background-alt hover:bg-background-alt'
                 }`}
               >
-                {option.label}
+                <div className="text-center">
+                  <div className="text-lg font-medium">
+                    {option.label}
+                  </div>
+                  {option.subtitle && (
+                    <div className="text-sm text-gray-400 mt-1">
+                      {option.subtitle}
+                    </div>
+                  )}
+                </div>
               </button>
             ))}
           </div>
