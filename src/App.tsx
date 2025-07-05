@@ -118,6 +118,20 @@ function App() {
     setShowTimerSelection(false);
   };
 
+  const handleStartTimerWithIntention = (minutes: number, updatedIntention?: string) => {
+    if (updatedIntention !== undefined) {
+      setUserIntention(updatedIntention);
+    }
+    setTimerState({
+      isActive: true,
+      totalSeconds: minutes * 60,
+      isRunning: true,
+      originalMinutes: minutes,
+      showCompletion: false,
+    });
+    setShowTimerSelection(false);
+  };
+
   const handleUpdateTimer = (updates: Partial<TimerState>) => {
     setTimerState(prev => ({ ...prev, ...updates }));
   };
@@ -153,9 +167,12 @@ function App() {
             <StartScreen 
               timerState={timerState}
               onStartTimer={handleStartTimer}
+              onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
               userIntention={userIntention}
+              emotionCategory={userEmotion?.category || null}
+              selectedEmotion={userEmotion?.emotion || null}
             />
           );
         }
@@ -165,9 +182,12 @@ function App() {
             <StartScreen 
               timerState={timerState}
               onStartTimer={handleStartTimer}
+              onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
               userIntention={userIntention}
+              emotionCategory={userEmotion?.category || null}
+              selectedEmotion={userEmotion?.emotion || null}
             />
           );
         }
@@ -195,9 +215,12 @@ function App() {
             <StartScreen 
               timerState={timerState}
               onStartTimer={handleStartTimer}
+              onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
               userIntention={userIntention}
+              emotionCategory={userEmotion?.category || null}
+              selectedEmotion={userEmotion?.emotion || null}
             />
           );
         }
@@ -206,9 +229,12 @@ function App() {
             <StartScreen 
               timerState={timerState}
               onStartTimer={handleStartTimer}
+              onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
               userIntention={userIntention}
+              emotionCategory={userEmotion?.category || null}
+              selectedEmotion={userEmotion?.emotion || null}
             />
           );
         }

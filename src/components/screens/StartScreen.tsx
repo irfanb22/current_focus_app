@@ -5,18 +5,26 @@ import { TimerState } from '../../App';
 interface StartScreenProps {
   timerState: TimerState;
   onStartTimer: (minutes: number) => void;
+  onStartTimerWithIntention: (minutes: number, updatedIntention?: string) => void;
   onUpdateTimer: (updates: Partial<TimerState>) => void;
   onEndTimer: () => void;
   userIntention: string;
+  emotionCategory: 'pleasant' | 'unpleasant' | null;
+  selectedEmotion: string | null;
 }
 
 const StartScreen: React.FC<StartScreenProps> = ({ 
   timerState, 
   onStartTimer, 
+  onStartTimerWithIntention,
   onUpdateTimer, 
   onEndTimer,
-  userIntention
+  userIntention,
+  emotionCategory,
+  selectedEmotion
 }) => {
+  const [currentIntention, setCurrentIntention] = React.useState(userIntention);
+
   const handleTimerSelect = (duration: string) => {
     let minutes: number;
     
@@ -43,6 +51,14 @@ const StartScreen: React.FC<StartScreenProps> = ({
     onStartTimer(minutes);
   };
 
+  const handlePleasantTimerSelect = (minutes: number) => {
+    onStartTimerWithIntention(minutes, currentIntention);
+  };
+
+  const handleSkipRefinement = () => {
+    onStartTimerWithIntention(30, userIntention);
+  };
+
   // Show timer screen if timer is active
   if (timerState.isActive) {
     return (
@@ -55,6 +71,91 @@ const StartScreen: React.FC<StartScreenProps> = ({
     );
   }
 
+  // Pleasant emotions branch - refined focus flow
+  if (emotionCategory === 'pleasant') {
+    const pleasantTimerOptions = [
+      { label: '30 minutes', minutes: 30, subtitle: 'Find your flow' },
+      { label: '60 minutes', minutes: 60, subtitle: 'Deep focus' },
+      { label: '90 minutes', minutes: 90, subtitle: 'Flow state' },
+    ];
+
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="px-6 py-8">
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+            <div className="w-full max-w-md">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-text-primary mb-4 leading-relaxed">
+                  Let's refine your focus
+                </h1>
+                <p className="text-gray-500 text-lg">
+                  Want to make this more specific and actionable?
+                </p>
+              </div>
+
+              {/* Examples Box */}
+              <div className="mb-8 p-4 bg-background-alt rounded-lg">
+                <p className="text-sm text-gray-600 mb-3 font-medium">Examples:</p>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>• "Write opening paragraph" (instead of "write blog post")</p>
+                  <p>• "Clear desk surface" (instead of "clean office")</p>
+                  <p>• "Review login function" (instead of "fix the code")</p>
+                </div>
+              </div>
+
+              {/* Refinement Input */}
+              <div className="mb-8">
+                <textarea
+                  value={currentIntention}
+                  onChange={(e) => setCurrentIntention(e.target.value)}
+                  placeholder="Refine your intention here..."
+                  className="w-full px-6 py-4 text-lg text-text-primary bg-background border-2 border-background-alt rounded-lg focus:border-primary focus:outline-none transition-colors duration-200 resize-none"
+                  rows={3}
+                  maxLength={150}
+                />
+                <div className="text-right mt-2">
+                  <span className="text-sm text-gray-400">
+                    {currentIntention.length}/150
+                  </span>
+                </div>
+              </div>
+
+              {/* Timer Options */}
+              <div className="space-y-4 mb-6">
+                {pleasantTimerOptions.map((option) => (
+                  <button
+                    key={option.minutes}
+                    onClick={() => handlePleasantTimerSelect(option.minutes)}
+                    className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-background text-text-primary border-background-alt hover:bg-background-alt transition-all duration-200 text-center"
+                  >
+                    <div>
+                      {option.label}
+                      <p className="text-sm text-gray-400 mt-1">
+                        {option.subtitle}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Skip Refinement */}
+              <div className="text-center">
+                <button
+                  onClick={handleSkipRefinement}
+                  className="text-gray-400 hover:text-text-primary transition-colors duration-200 text-sm"
+                >
+                  Skip refinement
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default flow for non-pleasant emotions or no emotion selected
   const timerOptions = [
     { label: '5 minutes', value: '5 minutes', subtitle: 'Small step' },
     { label: '30 minutes', value: '30 minutes', subtitle: 'Find your flow' },
