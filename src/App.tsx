@@ -5,6 +5,7 @@ import StartScreen from './components/screens/StartScreen';
 import SettingsScreen from './components/screens/SettingsScreen';
 import SplashScreen from './components/screens/SplashScreen';
 import IntentionScreen from './components/screens/IntentionScreen';
+import EmotionScreen from './components/screens/EmotionScreen';
 
 export type TabType = 'sessions' | 'start' | 'settings';
 
@@ -21,6 +22,11 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [userIntention, setUserIntention] = useState('');
   const [showTimerSelection, setShowTimerSelection] = useState(false);
+  const [showEmotionScreen, setShowEmotionScreen] = useState(false);
+  const [userEmotion, setUserEmotion] = useState<{
+    emotion: string;
+    category: 'pleasant' | 'unpleasant';
+  } | null>(null);
   const [timerState, setTimerState] = useState<TimerState>({
     isActive: false,
     totalSeconds: 0,
@@ -86,13 +92,19 @@ function App() {
 
   const handleIntentionComplete = (intention: string) => {
     setUserIntention(intention);
-    setShowTimerSelection(true);
+    setShowEmotionScreen(true);
   };
 
   const handleIntentionJustStart = (intention: string) => {
     setUserIntention(intention);
     // Immediately start a 25-minute timer
     handleStartTimer(25);
+  };
+
+  const handleEmotionSelect = (emotion: string, category: 'pleasant' | 'unpleasant') => {
+    setUserEmotion({ emotion, category });
+    setShowEmotionScreen(false);
+    setShowTimerSelection(true);
   };
 
   const handleStartTimer = (minutes: number) => {
@@ -120,6 +132,8 @@ function App() {
     });
     // Clear the intention and timer selection state when ending a timer session
     setUserIntention('');
+    setUserEmotion(null);
+    setShowEmotionScreen(false);
     setShowTimerSelection(false);
   };
 
@@ -157,6 +171,14 @@ function App() {
             />
           );
         }
+        // Show emotion screen if user has completed intention but not selected emotion
+        if (showEmotionScreen) {
+          return (
+            <EmotionScreen 
+              onEmotionSelect={handleEmotionSelect}
+            />
+          );
+        }
         // Default: show intention screen when no timer is active
         return (
           <IntentionScreen 
@@ -187,6 +209,13 @@ function App() {
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
               userIntention={userIntention}
+            />
+          );
+        }
+        if (showEmotionScreen) {
+          return (
+            <EmotionScreen 
+              onEmotionSelect={handleEmotionSelect}
             />
           );
         }
