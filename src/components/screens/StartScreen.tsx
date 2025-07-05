@@ -30,14 +30,14 @@ const StartScreen: React.FC<StartScreenProps> = ({
       case '60 minutes':
         minutes = 60;
         break;
-      case '90 minutes':
-        minutes = 90;
+      case '75 minutes':
+        minutes = 75;
         break;
       case 'Just Start':
-        minutes = 25; // Default to 25 minutes for "Just Start"
+        minutes = 30; // Default to 30 minutes for "Just Start"
         break;
       default:
-        minutes = 25;
+        minutes = 30;
     }
     
     onStartTimer(minutes);
@@ -59,7 +59,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
     { label: '5 minutes', value: '5 minutes' },
     { label: '30 minutes', value: '30 minutes' },
     { label: '60 minutes', value: '60 minutes' },
-    { label: '90 minutes', value: '90 minutes' },
+    { label: '75 minutes', value: '75 minutes' },
     { label: 'Just Start', value: 'Just Start', isOutlined: true },
   ];
 
