@@ -18,6 +18,7 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue, onJustSta
   };
 
   const handleJustStart = () => {
+    // Pass 30 minutes as the default duration for "Just Start"
     onJustStart(intention.trim());
   };
 
@@ -67,7 +68,7 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue, onJustSta
               onClick={handleJustStart}
               className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-background text-text-primary border-primary hover:bg-primary hover:text-white transition-all duration-200"
             >
-              Just Start (25 min)
+              Just Start (30 min)
             </button>
           </div>
         </form>
