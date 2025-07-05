@@ -56,10 +56,10 @@ const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   const timerOptions = [
-    { label: '5 minutes', value: '5 minutes' },
-    { label: '30 minutes', value: '30 minutes' },
-    { label: '60 minutes', value: '60 minutes' },
-    { label: '75 minutes', value: '75 minutes' },
+    { label: '5 minutes', value: '5 minutes', subtitle: 'Small step' },
+    { label: '30 minutes', value: '30 minutes', subtitle: 'Find your flow' },
+    { label: '60 minutes', value: '60 minutes', subtitle: 'Deep focus' },
+    { label: '75 minutes', value: '75 minutes', subtitle: 'Flow state' },
     { label: 'Just Start', value: 'Just Start', isOutlined: true },
   ];
 
@@ -86,13 +86,20 @@ const StartScreen: React.FC<StartScreenProps> = ({
               <button
                 key={option.value}
                 onClick={() => handleTimerSelect(option.value)}
-                className={`w-full py-4 px-6 text-lg font-medium rounded-lg border-2 transition-all duration-200 ${
+                className={`w-full py-4 px-6 text-lg font-medium rounded-lg border-2 transition-all duration-200 text-center ${
                   option.isOutlined
                     ? 'bg-background text-text-primary border-primary hover:bg-primary hover:text-white'
                     : 'bg-background text-text-primary border-background-alt hover:bg-background-alt'
                 }`}
               >
-                {option.label}
+                <div>
+                  {option.label}
+                  {option.subtitle && (
+                    <p className="text-sm text-gray-400 mt-1">
+                      {option.subtitle}
+                    </p>
+                  )}
+                </div>
               </button>
             ))}
           </div>
