@@ -155,6 +155,85 @@ const StartScreen: React.FC<StartScreenProps> = ({
     );
   }
 
+  // Unpleasant emotions branch - make it tiny flow
+  if (emotionCategory === 'unpleasant') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="px-6 py-8">
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+            <div className="w-full max-w-md">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-text-primary mb-4 leading-relaxed">
+                  Let's make this tiny
+                </h1>
+                
+                {/* Show original intention */}
+                {userIntention && (
+                  <div className="mb-4 p-3 bg-background-alt rounded-lg">
+                    <p className="text-sm text-gray-600 mb-1">Original focus:</p>
+                    <p className="text-base text-text-primary font-medium italic">
+                      "{userIntention}"
+                    </p>
+                  </div>
+                )}
+                
+                <p className="text-gray-500 text-lg">
+                  What's the smallest piece you could start with?
+                </p>
+              </div>
+
+              {/* Examples Box */}
+              <div className="mb-8 p-4 bg-background-alt rounded-lg">
+                <p className="text-sm text-gray-600 mb-3 font-medium">Examples:</p>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>• "Write one sentence"</p>
+                  <p>• "Open the file"</p>
+                  <p>• "Clear one small area"</p>
+                  <p>• "Read what I have so far"</p>
+                </div>
+              </div>
+
+              {/* Tiny intention input */}
+              <div className="mb-6">
+                <textarea
+                  value={currentIntention}
+                  onChange={(e) => setCurrentIntention(e.target.value)}
+                  placeholder="What's the tiniest step you could take?"
+                  className="w-full px-6 py-4 text-lg text-text-primary bg-background border-2 border-background-alt rounded-lg focus:border-primary focus:outline-none transition-colors duration-200 resize-none"
+                  rows={3}
+                  maxLength={150}
+                />
+                <div className="text-right mt-2">
+                  <span className="text-sm text-gray-400">
+                    {currentIntention.length}/150
+                  </span>
+                </div>
+              </div>
+
+              {/* Motivational text */}
+              <div className="mb-8 text-center">
+                <p className="text-gray-600 italic leading-relaxed">
+                  "Task anxiety is a house of cards. It falls apart the minute you start."
+                </p>
+              </div>
+
+              {/* Start 5-minute timer button */}
+              {currentIntention.trim().length > 0 && (
+                <button
+                  onClick={() => onStartTimerWithIntention(5, currentIntention)}
+                  className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
+                >
+                  Start 5-minute timer
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Default flow for non-pleasant emotions or no emotion selected
   const timerOptions = [
     { label: '5 minutes', value: '5 minutes', subtitle: 'Small step' },
