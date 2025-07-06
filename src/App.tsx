@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Navigation from './components/Navigation';
 import MySessionsScreen from './components/screens/MySessionsScreen';
 import StartScreen from './components/screens/StartScreen';
@@ -89,9 +89,9 @@ function App() {
     }
   }, [timerState.isActive, timerState.totalSeconds, timerState.showPreFinish, timerState.showCompletion]);
 
-  const handleSplashComplete = () => {
+  const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
-  };
+  }, []);
 
   const handleIntentionComplete = (intention: string) => {
     setUserIntention(intention);
