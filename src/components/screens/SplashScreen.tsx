@@ -11,7 +11,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
     }, 4000); // 4 seconds
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []); // Empty dependency array - run only once on mount
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
