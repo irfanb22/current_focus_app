@@ -15,7 +15,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   onEndTimer,
   userIntention
 }) => {
-  const { totalSeconds, isRunning, originalMinutes, showCompletion } = timerState;
+  const { totalSeconds, isRunning, originalMinutes, showCompletion, showPreFinish } = timerState;
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -50,7 +50,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   };
 
   // Show completion screen when timer is done
-  if (showCompletion) {
+  if (showCompletion && !showPreFinish) {
     return (
       <CompletionScreen
         focusedMinutes={originalMinutes}

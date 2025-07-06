@@ -6,6 +6,7 @@ import SettingsScreen from './components/screens/SettingsScreen';
 import SplashScreen from './components/screens/SplashScreen';
 import IntentionScreen from './components/screens/IntentionScreen';
 import EmotionScreen from './components/screens/EmotionScreen';
+import PreFinishScreen from './components/screens/PreFinishScreen';
 
 export type TabType = 'sessions' | 'start' | 'settings';
 
@@ -15,6 +16,7 @@ export interface TimerState {
   isRunning: boolean;
   originalMinutes: number;
   showCompletion: boolean;
+  showPreFinish: boolean;
 }
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
     isRunning: false,
     originalMinutes: 0,
     showCompletion: false,
+    showPreFinish: false,
   });
 
   // Audio reference for completion chime
@@ -63,11 +66,11 @@ function App() {
 
   // Handle timer completion at App level
   useEffect(() => {
-    if (timerState.isActive && timerState.totalSeconds === 0 && !timerState.showCompletion) {
+    if (timerState.isActive && timerState.totalSeconds === 0 && !timerState.showPreFinish && !timerState.showCompletion) {
       setTimerState(prev => ({
         ...prev,
         isRunning: false,
-        showCompletion: true
+        showPreFinish: true
       }));
       
       // Play completion chime
@@ -84,7 +87,7 @@ function App() {
       // Auto-navigate to Start tab when timer completes
       setActiveTab('start');
     }
-  }, [timerState.isActive, timerState.totalSeconds, timerState.showCompletion]);
+  }, [timerState.isActive, timerState.totalSeconds, timerState.showPreFinish, timerState.showCompletion]);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
@@ -114,6 +117,7 @@ function App() {
       isRunning: true,
       originalMinutes: minutes,
       showCompletion: false,
+      showPreFinish: false,
     });
     setShowTimerSelection(false);
   };
@@ -128,6 +132,7 @@ function App() {
       isRunning: true,
       originalMinutes: minutes,
       showCompletion: false,
+      showPreFinish: false,
     });
     setShowTimerSelection(false);
   };
@@ -143,12 +148,30 @@ function App() {
       isRunning: false,
       originalMinutes: 0,
       showCompletion: false,
+      showPreFinish: false,
     });
     // Clear the intention and timer selection state when ending a timer session
     setUserIntention('');
     setUserEmotion(null);
     setShowEmotionScreen(false);
     setShowTimerSelection(false);
+  };
+
+  const handleKeepGoing = () => {
+    setTimerState(prev => ({
+      ...prev,
+      showPreFinish: false,
+      totalSeconds: 15 * 60, // Add 15 minutes
+      isRunning: true,
+    }));
+  };
+
+  const handleCompleteSession = () => {
+    setTimerState(prev => ({
+      ...prev,
+      showPreFinish: false,
+      showCompletion: true,
+    }));
   };
 
   // Show splash screen first
@@ -161,6 +184,16 @@ function App() {
       case 'sessions':
         return <MySessionsScreen />;
       case 'start':
+        // Show pre-finish screen if timer reached zero
+        if (timerState.showPreFinish) {
+          return (
+            <PreFinishScreen
+              onKeepGoing={handleKeepGoing}
+              onCompleteSession={handleCompleteSession}
+              userIntention={userIntention}
+            />
+          );
+        }
         // Show timer screen if timer is active
         if (timerState.isActive) {
           return (
@@ -210,6 +243,15 @@ function App() {
         return <SettingsScreen />;
       default:
         // Default case - same logic as 'start'
+        if (timerState.showPreFinish) {
+          return (
+            <PreFinishScreen
+              onKeepGoing={handleKeepGoing}
+              onCompleteSession={handleCompleteSession}
+              userIntention={userIntention}
+            />
+          );
+        }
         if (timerState.isActive) {
           return (
             <StartScreen 
