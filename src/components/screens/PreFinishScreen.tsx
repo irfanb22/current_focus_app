@@ -4,12 +4,14 @@ interface PreFinishScreenProps {
   onKeepGoing: () => void;
   onCompleteSession: () => void;
   userIntention: string;
+  focusedMinutes: number;
 }
 
 const PreFinishScreen: React.FC<PreFinishScreenProps> = ({ 
   onKeepGoing, 
   onCompleteSession,
-  userIntention
+  userIntention,
+  focusedMinutes
 }) => {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
@@ -30,7 +32,7 @@ const PreFinishScreen: React.FC<PreFinishScreenProps> = ({
             How are you feeling?
           </h1>
           <p className="text-gray-500 text-lg">
-            Check in with yourself
+            You rode this current for {focusedMinutes} minutes
           </p>
         </div>
 
@@ -40,14 +42,14 @@ const PreFinishScreen: React.FC<PreFinishScreenProps> = ({
             onClick={onKeepGoing}
             className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
           >
-            I'm in flow, keep going
+            Let's ride this current (+15 minutes)
           </button>
           
           <button
             onClick={onCompleteSession}
             className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-background text-text-primary border-background-alt hover:bg-background-alt transition-all duration-200"
           >
-            Complete session
+            Complete my current session
           </button>
         </div>
       </div>
