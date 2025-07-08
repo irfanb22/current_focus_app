@@ -211,13 +211,6 @@ const StartScreen: React.FC<StartScreenProps> = ({
                 </div>
               </div>
 
-              {/* Motivational text */}
-              <div className="mb-8 text-center">
-                <p className="text-gray-600 italic leading-relaxed">
-                  "Task anxiety is a house of cards. It falls apart the minute you start."
-                </p>
-              </div>
-
               {/* Start 5-minute timer button */}
               {currentIntention.trim().length > 0 && (
                 <button
