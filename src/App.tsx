@@ -191,6 +191,7 @@ function App() {
               onKeepGoing={handleKeepGoing}
               onCompleteSession={handleCompleteSession}
               userIntention={userIntention}
+              focusedMinutes={timerState.originalMinutes}
             />
           );
         }
@@ -249,6 +250,7 @@ function App() {
               onKeepGoing={handleKeepGoing}
               onCompleteSession={handleCompleteSession}
               userIntention={userIntention}
+              focusedMinutes={timerState.originalMinutes}
             />
           );
         }
