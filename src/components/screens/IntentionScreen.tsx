@@ -73,15 +73,6 @@ const IntentionScreen: React.FC<IntentionScreenProps> = ({ onContinue, onJustSta
           </div>
         </form>
 
-        {/* Skip Option */}
-        <div className="text-center mt-6">
-          <button
-            onClick={() => onContinue('')}
-            className="text-gray-400 hover:text-text-primary transition-colors duration-200 text-sm"
-          >
-            Skip for now
-          </button>
-        </div>
       </div>
     </div>
   );
