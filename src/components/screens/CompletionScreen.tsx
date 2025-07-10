@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import { getCompletionQuote } from '../../constants/quotes';
 
 interface CompletionScreenProps {
   focusedMinutes: number;
@@ -14,6 +15,8 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({
   onAdd20Minutes,
   userIntention
 }) => {
+  const completionQuote = getCompletionQuote();
+
   return (
     <div className="min-h-screen bg-success flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-6">
@@ -34,6 +37,16 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({
           <p className="text-xl text-gray-600 mb-4">
             You focused for <span className="font-semibold text-text-primary">{focusedMinutes} minutes</span>
           </p>
+          
+          {/* Quote Display */}
+          <div className="mt-6 mb-4">
+            <p className="text-gray-600 italic text-lg mb-2">
+              "{completionQuote.text}"
+            </p>
+            <p className="text-gray-500 text-sm">
+              - {completionQuote.author}
+            </p>
+          </div>
           
           {/* Show completed intention */}
           {userIntention && (

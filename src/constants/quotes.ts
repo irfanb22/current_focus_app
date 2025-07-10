@@ -25,3 +25,9 @@ export const quotes = [
     screen: "completion"
   }
 ];
+
+export const getCompletionQuote = () => {
+  const completionQuotes = quotes.filter(quote => quote.screen === "completion");
+  const randomIndex = Math.floor(Math.random() * completionQuotes.length);
+  return completionQuotes[randomIndex];
+};
