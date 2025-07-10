@@ -42,7 +42,7 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
         className="absolute top-8 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
         aria-label="Back"
       >
-        <
+        &lt;
       </button>
       
       <div className="w-full max-w-md">
