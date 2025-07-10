@@ -179,7 +179,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
             className="absolute top-8 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
             aria-label="Back to Emotions"
           >
-            < Emotions
+            &lt; Emotions
           </button>
         )}
         
