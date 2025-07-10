@@ -7,6 +7,7 @@ import SplashScreen from './components/screens/SplashScreen';
 import IntentionScreen from './components/screens/IntentionScreen';
 import EmotionScreen from './components/screens/EmotionScreen';
 import PreFinishScreen from './components/screens/PreFinishScreen';
+import CompletionScreen from './components/screens/CompletionScreen';
 
 export type TabType = 'sessions' | 'start' | 'settings';
 
@@ -21,6 +22,10 @@ export interface TimerState {
 
 function App() {
   const isDevelopment = true;
+  
+  // Diagnostic logging for renders
+  console.log('[Debug] App render timestamp:', Date.now());
+  
   const [activeTab, setActiveTab] = useState<TabType>('start');
   const [showSplash, setShowSplash] = useState(!isDevelopment);
   const [userIntention, setUserIntention] = useState('');
@@ -39,6 +44,16 @@ function App() {
     showPreFinish: false,
   });
 
+  // Log current state for debugging
+  console.log('[Debug] Current state:', {
+    activeTab,
+    showSplash,
+    userIntention,
+    showTimerSelection,
+    showEmotionScreen,
+    userEmotion,
+    timerState
+  });
   // Audio reference for completion chime
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -49,6 +64,12 @@ function App() {
 
   // Timer logic runs at App level - continues regardless of active tab
   useEffect(() => {
+    console.log('[Debug] Timer effect triggered', {
+      isActive: timerState.isActive,
+      isRunning: timerState.isRunning,
+      totalSeconds: timerState.totalSeconds
+    });
+    
     let interval: NodeJS.Timeout | null = null;
 
     if (timerState.isActive && timerState.isRunning && timerState.totalSeconds > 0) {
@@ -61,13 +82,22 @@ function App() {
     }
 
     return () => {
+      console.log('[Debug] Timer effect cleanup');
       if (interval) clearInterval(interval);
     };
-  }, [timerState.isActive, timerState.isRunning, timerState.totalSeconds]);
+  }, [timerState.isActive, timerState.isRunning]);
 
   // Handle timer completion at App level
   useEffect(() => {
+    console.log('[Debug] Timer completion effect triggered', {
+      isActive: timerState.isActive,
+      totalSeconds: timerState.totalSeconds,
+      showPreFinish: timerState.showPreFinish,
+      showCompletion: timerState.showCompletion
+    });
+    
     if (timerState.isActive && timerState.totalSeconds === 0 && !timerState.showPreFinish && !timerState.showCompletion) {
+      console.log('[Debug] Timer completed - setting showPreFinish');
       setTimerState(prev => ({
         ...prev,
         isRunning: false,
@@ -116,6 +146,7 @@ function App() {
   };
 
   const handleStartTimer = (minutes: number) => {
+    console.log('[Debug] handleStartTimer called with minutes:', minutes);
     setTimerState({
       isActive: true,
       totalSeconds: minutes * 60,
@@ -128,6 +159,7 @@ function App() {
   };
 
   const handleStartTimerWithIntention = (minutes: number, updatedIntention?: string) => {
+    console.log('[Debug] handleStartTimerWithIntention called', { minutes, updatedIntention });
     if (updatedIntention !== undefined) {
       setUserIntention(updatedIntention);
     }
@@ -143,10 +175,12 @@ function App() {
   };
 
   const handleUpdateTimer = (updates: Partial<TimerState>) => {
+    console.log('[Debug] handleUpdateTimer called with updates:', updates);
     setTimerState(prev => ({ ...prev, ...updates }));
   };
 
   const handleEndTimer = () => {
+    console.log('[Debug] handleEndTimer called');
     setTimerState({
       isActive: false,
       totalSeconds: 0,
@@ -163,6 +197,7 @@ function App() {
   };
 
   const handleKeepGoing = () => {
+    console.log('[Debug] handleKeepGoing called');
     setTimerState(prev => ({
       ...prev,
       showPreFinish: false,
@@ -172,6 +207,7 @@ function App() {
   };
 
   const handleCompleteSession = () => {
+    console.log('[Debug] handleCompleteSession called');
     setTimerState(prev => ({
       ...prev,
       showPreFinish: false,
