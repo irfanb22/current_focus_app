@@ -40,14 +40,6 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
     onEndTimer();
   };
 
-  const handleAdd20Minutes = () => {
-    onUpdateTimer({
-      showCompletion: false,
-      totalSeconds: 20 * 60,
-      originalMinutes: 20,
-      isRunning: true,
-    });
-  };
 
   // Show completion screen when timer is done
   if (showCompletion && !showPreFinish) {
@@ -55,7 +47,6 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
       <CompletionScreen
         focusedMinutes={originalMinutes}
         onEndSession={handleEndSession}
-        onAdd20Minutes={handleAdd20Minutes}
         userIntention={userIntention}
       />
     );

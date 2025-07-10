@@ -5,14 +5,12 @@ import { getCompletionQuote } from '../../constants/quotes';
 interface CompletionScreenProps {
   focusedMinutes: number;
   onEndSession: () => void;
-  onAdd20Minutes: () => void;
   userIntention: string;
 }
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ 
   focusedMinutes, 
   onEndSession, 
-  onAdd20Minutes,
   userIntention
 }) => {
   const completionQuote = getCompletionQuote();
@@ -62,21 +60,12 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({
 
       {/* Action Buttons */}
       <div className="px-6 pb-24">
-        <div className="space-y-4">
-          <button
-            onClick={onAdd20Minutes}
-            className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
-          >
-            Add 20 Minutes
-          </button>
-          
-          <button
-            onClick={onEndSession}
-            className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-background text-text-primary border-background-alt hover:bg-background-alt transition-all duration-200"
-          >
-            End Session
-          </button>
-        </div>
+        <button
+          onClick={onEndSession}
+          className="w-full py-4 px-6 text-lg font-medium rounded-lg border-2 bg-primary text-white border-primary hover:bg-opacity-90 transition-all duration-200"
+        >
+          Start Again
+        </button>
       </div>
     </div>
   );
