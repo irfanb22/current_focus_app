@@ -100,8 +100,8 @@ function App() {
 
   const handleIntentionJustStart = (intention: string) => {
     setUserIntention(intention);
-    // Immediately start a 25-minute timer
-    handleStartTimer(25);
+    // Immediately start a 30-minute timer
+    handleStartTimer(30);
   };
 
   const handleEmotionSelect = (emotion: string, category: 'pleasant' | 'unpleasant') => {
