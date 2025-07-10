@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 interface EmotionScreenProps {
   onEmotionSelect: (emotion: string, category: 'pleasant' | 'unpleasant') => void;
+  onBack: () => void;
 }
 
-const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect }) => {
+const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }) => {
   const [selectedCategory, setSelectedCategory] = useState<'pleasant' | 'unpleasant' | null>(null);
 
   const pleasantEmotions = [
@@ -34,7 +35,16 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative">
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className="absolute top-6 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
+        aria-label="Back"
+      >
+        &lt;
+      </button>
+      
       <div className="w-full max-w-md">
         {/* Question */}
         <div className="text-center mb-12">

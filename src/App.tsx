@@ -110,6 +110,10 @@ function App() {
     setShowTimerSelection(true);
   };
 
+  const handleBackFromEmotion = () => {
+    setShowEmotionScreen(false);
+  };
+
   const handleStartTimer = (minutes: number) => {
     setTimerState({
       isActive: true,
@@ -230,6 +234,7 @@ function App() {
           return (
             <EmotionScreen 
               onEmotionSelect={handleEmotionSelect}
+              onBack={handleBackFromEmotion}
             />
           );
         }
@@ -286,6 +291,7 @@ function App() {
           return (
             <EmotionScreen 
               onEmotionSelect={handleEmotionSelect}
+              onBack={handleBackFromEmotion}
             />
           );
         }
