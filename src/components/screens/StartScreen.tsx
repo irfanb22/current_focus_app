@@ -83,6 +83,17 @@ const StartScreen: React.FC<StartScreenProps> = ({
 
     return (
       <div className="min-h-screen bg-background">
+        {/* Back Button */}
+        {onBackToEmotion && (
+          <button
+            onClick={onBackToEmotion}
+            className="absolute top-8 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
+            aria-label="Back to Emotions"
+          >
+            &lt; Emotions
+          </button>
+        )}
+        
         <div className="px-6 py-8">
           <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
             <div className="w-full max-w-md">
