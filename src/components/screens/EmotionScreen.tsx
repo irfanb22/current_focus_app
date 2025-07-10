@@ -46,7 +46,7 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
               className="mr-4 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
               aria-label="Back"
             >
-              <
+              &lt;
             </button>
             <h1 className="text-3xl font-bold text-text-primary leading-relaxed">
               How does starting feel right now?
