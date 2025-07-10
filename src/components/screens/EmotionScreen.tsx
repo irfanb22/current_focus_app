@@ -77,7 +77,7 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
 
         {/* Specific Emotion Selection */}
         {selectedCategory && (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(selectedCategory === 'pleasant' ? pleasantEmotions : unpleasantEmotions).map((emotion) => (
               <button
                 key={emotion.value}
@@ -87,7 +87,12 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
                 {emotion.label}
               </button>
             ))}
-            
+          </div>
+        )}
+
+        {/* Back Button - separate from grid */}
+        {selectedCategory && (
+          <div className="mt-6">
             {/* Back Button */}
             <button
               onClick={handleBack}
