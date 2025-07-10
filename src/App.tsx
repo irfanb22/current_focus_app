@@ -20,8 +20,9 @@ export interface TimerState {
 }
 
 function App() {
+  const isDevelopment = true;
   const [activeTab, setActiveTab] = useState<TabType>('start');
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(!isDevelopment);
   const [userIntention, setUserIntention] = useState('');
   const [showTimerSelection, setShowTimerSelection] = useState(false);
   const [showEmotionScreen, setShowEmotionScreen] = useState(false);
