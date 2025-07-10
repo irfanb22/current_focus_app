@@ -145,6 +145,11 @@ function App() {
     setShowEmotionScreen(false);
   };
 
+  const handleBackToEmotionSelection = () => {
+    setShowEmotionScreen(true);
+    setShowTimerSelection(false);
+  };
+
   const handleStartTimer = (minutes: number) => {
     console.log('[Debug] handleStartTimer called with minutes:', minutes);
     setTimerState({
@@ -260,6 +265,7 @@ function App() {
               onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
+              onBackToEmotion={handleBackToEmotionSelection}
               userIntention={userIntention}
               emotionCategory={userEmotion?.category || null}
               selectedEmotion={userEmotion?.emotion || null}
@@ -318,6 +324,7 @@ function App() {
               onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
+              onBackToEmotion={handleBackToEmotionSelection}
               userIntention={userIntention}
               emotionCategory={userEmotion?.category || null}
               selectedEmotion={userEmotion?.emotion || null}

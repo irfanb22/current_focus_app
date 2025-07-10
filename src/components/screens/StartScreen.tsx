@@ -8,6 +8,7 @@ interface StartScreenProps {
   onStartTimerWithIntention: (minutes: number, updatedIntention?: string) => void;
   onUpdateTimer: (updates: Partial<TimerState>) => void;
   onEndTimer: () => void;
+  onBackToEmotion?: () => void;
   userIntention: string;
   emotionCategory: 'pleasant' | 'unpleasant' | null;
   selectedEmotion: string | null;
@@ -19,6 +20,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
   onStartTimerWithIntention,
   onUpdateTimer, 
   onEndTimer,
+  onBackToEmotion,
   userIntention,
   emotionCategory,
   selectedEmotion

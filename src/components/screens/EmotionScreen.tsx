@@ -40,9 +40,9 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
       <button
         onClick={onBack}
         className="absolute top-8 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
-        aria-label="Back"
+        aria-label="Back to Set Focus"
       >
-        &lt;
+        &lt; Set Focus
       </button>
       
       <div className="w-full max-w-md">
