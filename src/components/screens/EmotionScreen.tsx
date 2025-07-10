@@ -36,22 +36,21 @@ const EmotionScreen: React.FC<EmotionScreenProps> = ({ onEmotionSelect, onBack }
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative">
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className="absolute top-8 left-6 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
+        aria-label="Back"
+      >
+        <
+      </button>
+      
       <div className="w-full max-w-md">
         {/* Question */}
         <div className="text-center mb-12">
-          {/* Header with back button */}
-          <div className="flex items-center justify-start mb-4">
-            <button
-              onClick={onBack}
-              className="mr-4 text-text-primary text-2xl font-bold hover:text-primary transition-colors duration-200"
-              aria-label="Back"
-            >
-              &lt;
-            </button>
-            <h1 className="text-3xl font-bold text-text-primary leading-relaxed">
-              How does starting feel right now?
-            </h1>
-          </div>
+          <h1 className="text-3xl font-bold text-text-primary mb-4 leading-relaxed">
+            How does starting feel right now?
+          </h1>
           <p className="text-gray-500 text-lg">
             {selectedCategory ? 'Choose what resonates most' : 'Check in with yourself'}
           </p>
