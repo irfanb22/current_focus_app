@@ -96,6 +96,21 @@ function App() {
         if (newTotalSeconds === 0) {
           if (interval) clearInterval(interval);
           document.title = "Current - A zen focus timer";
+          
+          // Play completion chime
+          if (audioRef.current) {
+            try {
+              audioRef.current.play().catch(error => {
+                console.log('Audio playback failed:', error);
+              });
+            } catch (error) {
+              console.log('Audio playback error:', error);
+            }
+          }
+          
+          // Auto-navigate to Start tab when timer completes
+          setActiveTab('start');
+          
           setTimerState(prev => ({
             ...prev,
             isRunning: false,
@@ -135,39 +150,6 @@ function App() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [timerState.isActive, timerState.isRunning, timerState.startTime, timerState.originalMinutes, timerState.pausedDuration]);
-
-  // Handle timer completion at App level
-  useEffect(() => {
-    console.log('[Debug] Timer completion effect triggered', {
-      isActive: timerState.isActive,
-      totalSeconds: timerState.totalSeconds,
-      showPreFinish: timerState.showPreFinish,
-      showCompletion: timerState.showCompletion
-    });
-    
-    if (timerState.isActive && timerState.totalSeconds === 0 && !timerState.showPreFinish && !timerState.showCompletion) {
-      console.log('[Debug] Timer completed - setting showPreFinish');
-      setTimerState(prev => ({
-        ...prev,
-        isRunning: false,
-        showPreFinish: true
-      }));
-      
-      // Play completion chime
-      if (audioRef.current) {
-        try {
-          audioRef.current.play().catch(error => {
-            console.log('Audio playback failed:', error);
-          });
-        } catch (error) {
-          console.log('Audio playback error:', error);
-        }
-      }
-      
-      // Auto-navigate to Start tab when timer completes
-      setActiveTab('start');
-    }
-  }, [timerState.isActive, timerState.totalSeconds, timerState.showPreFinish, timerState.showCompletion]);
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
