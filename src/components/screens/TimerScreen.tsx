@@ -6,6 +6,7 @@ interface TimerScreenProps {
   timerState: TimerState;
   onUpdateTimer: (updates: Partial<TimerState>) => void;
   onEndTimer: () => void;
+  onAddTime: (minutes: number) => void;
   userIntention: string;
 }
 
@@ -13,6 +14,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   timerState, 
   onUpdateTimer, 
   onEndTimer,
+  onAddTime,
   userIntention
 }) => {
   const { totalSeconds, isRunning, originalMinutes, showCompletion, showPreFinish } = timerState;
@@ -28,7 +30,7 @@ const TimerScreen: React.FC<TimerScreenProps> = ({
   };
 
   const handleAdd15Minutes = () => {
-    onUpdateTimer({ totalSeconds: totalSeconds + (15 * 60) });
+    onAddTime(15);
   };
 
   const handleQuit = () => {

@@ -279,8 +279,22 @@ function App() {
     setTimerState(prev => ({
       ...prev,
       showPreFinish: false,
-      totalSeconds: 15 * 60, // Add 15 minutes
+      showCompletion: false,
       isRunning: true,
+      startTime: prev.startTime ? prev.startTime + (15 * 60 * 1000) : Date.now(),
+      pausedDuration: 0,
+    }));
+  };
+
+  const handleAddTime = (minutesToAdd: number) => {
+    console.log('[Debug] handleAddTime called with minutes:', minutesToAdd);
+    setTimerState(prev => ({
+      ...prev,
+      showPreFinish: false,
+      showCompletion: false,
+      isRunning: true,
+      startTime: prev.startTime ? prev.startTime + (minutesToAdd * 60 * 1000) : Date.now(),
+      pausedDuration: 0,
     }));
   };
 
@@ -323,6 +337,7 @@ function App() {
               onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
+              onAddTime={handleAddTime}
               userIntention={userIntention}
               emotionCategory={userEmotion?.category || null}
               selectedEmotion={userEmotion?.emotion || null}
@@ -383,6 +398,7 @@ function App() {
               onStartTimerWithIntention={handleStartTimerWithIntention}
               onUpdateTimer={handleUpdateTimer}
               onEndTimer={handleEndTimer}
+              onAddTime={handleAddTime}
               userIntention={userIntention}
               emotionCategory={userEmotion?.category || null}
               selectedEmotion={userEmotion?.emotion || null}
