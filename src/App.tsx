@@ -18,6 +18,8 @@ export interface TimerState {
   originalMinutes: number;
   showCompletion: boolean;
   showPreFinish: boolean;
+  startTime: number | null;
+  pausedDuration: number;
 }
 
 function App() {
@@ -42,7 +44,10 @@ function App() {
     originalMinutes: 0,
     showCompletion: false,
     showPreFinish: false,
+    startTime: null,
+    pausedDuration: 0,
   });
+  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
 
   // Log current state for debugging
   console.log('[Debug] Current state:', {
@@ -57,35 +62,79 @@ function App() {
   // Audio reference for completion chime
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Helper function to format time for tab title
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   // Initialize audio on component mount
   useEffect(() => {
     audioRef.current = new Audio('/sounds/chime_current_end.wav');
   }, []);
 
-  // Timer logic runs at App level - continues regardless of active tab
+  // Timestamp-based timer logic - runs reliably in background tabs
   useEffect(() => {
-    console.log('[Debug] Timer effect triggered', {
-      isActive: timerState.isActive,
-      isRunning: timerState.isRunning,
-      totalSeconds: timerState.totalSeconds
-    });
-    
     let interval: NodeJS.Timeout | null = null;
 
-    if (timerState.isActive && timerState.isRunning && timerState.totalSeconds > 0) {
+    if (timerState.isActive && timerState.isRunning && timerState.startTime) {
       interval = setInterval(() => {
+        const actualRemainingMs = timerState.originalMinutes * 60 * 1000 - (Date.now() - (timerState.startTime || 0) - timerState.pausedDuration);
+        const newTotalSeconds = Math.max(0, Math.floor(actualRemainingMs / 1000));
+        
+        // Update tab title regardless of visibility
+        document.title = `⏱️ ${formatTime(newTotalSeconds)} - Current`;
+        
+        // Update state
         setTimerState(prev => ({
           ...prev,
-          totalSeconds: prev.totalSeconds - 1
+          totalSeconds: newTotalSeconds
         }));
+        
+        // Handle timer completion
+        if (newTotalSeconds === 0) {
+          if (interval) clearInterval(interval);
+          document.title = "Current - A zen focus timer";
+          setTimerState(prev => ({
+            ...prev,
+            isRunning: false,
+            showPreFinish: true
+          }));
+        }
       }, 1000);
     }
 
     return () => {
-      console.log('[Debug] Timer effect cleanup');
-      if (interval) clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
+      if (!timerState.isActive) {
+        document.title = "Current - A zen focus timer";
+      }
     };
-  }, [timerState.isActive, timerState.isRunning]);
+  }, [timerState.isActive, timerState.isRunning, timerState.startTime, timerState.originalMinutes, timerState.pausedDuration]);
+
+  // Page Visibility API - sync timer when tab becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && timerState.isActive && timerState.isRunning && timerState.startTime) {
+        const actualRemainingMs = timerState.originalMinutes * 60 * 1000 - (Date.now() - (timerState.startTime || 0) - timerState.pausedDuration);
+        const newTotalSeconds = Math.max(0, Math.floor(actualRemainingMs / 1000));
+        
+        setTimerState(prev => ({
+          ...prev,
+          totalSeconds: newTotalSeconds
+        }));
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [timerState.isActive, timerState.isRunning, timerState.startTime, timerState.originalMinutes, timerState.pausedDuration]);
 
   // Handle timer completion at App level
   useEffect(() => {
@@ -159,6 +208,8 @@ function App() {
       originalMinutes: minutes,
       showCompletion: false,
       showPreFinish: false,
+      startTime: Date.now(),
+      pausedDuration: 0,
     });
     setShowTimerSelection(false);
   };
@@ -175,17 +226,36 @@ function App() {
       originalMinutes: minutes,
       showCompletion: false,
       showPreFinish: false,
+      startTime: Date.now(),
+      pausedDuration: 0,
     });
     setShowTimerSelection(false);
   };
 
   const handleUpdateTimer = (updates: Partial<TimerState>) => {
     console.log('[Debug] handleUpdateTimer called with updates:', updates);
-    setTimerState(prev => ({ ...prev, ...updates }));
+    setTimerState(prev => {
+      const newState = { ...prev, ...updates };
+      
+      // Handle pause
+      if (updates.isRunning === false && prev.isRunning === true) {
+        setPauseStartTime(Date.now());
+      }
+      
+      // Handle resume
+      if (updates.isRunning === true && prev.isRunning === false && pauseStartTime) {
+        const pauseDuration = Date.now() - pauseStartTime;
+        newState.pausedDuration = prev.pausedDuration + pauseDuration;
+        setPauseStartTime(null);
+      }
+      
+      return newState;
+    });
   };
 
   const handleEndTimer = () => {
     console.log('[Debug] handleEndTimer called');
+    document.title = "Current - A zen focus timer";
     setTimerState({
       isActive: false,
       totalSeconds: 0,
@@ -193,7 +263,10 @@ function App() {
       originalMinutes: 0,
       showCompletion: false,
       showPreFinish: false,
+      startTime: null,
+      pausedDuration: 0,
     });
+    setPauseStartTime(null);
     // Clear the intention and timer selection state when ending a timer session
     setUserIntention('');
     setUserEmotion(null);
