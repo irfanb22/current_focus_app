@@ -263,7 +263,9 @@ function App() {
       showPreFinish: false,
       showCompletion: false,
       isRunning: true,
-      startTime: prev.startTime ? prev.startTime + (15 * 60 * 1000) : Date.now(),
+      startTime: Date.now(),
+      originalMinutes: prev.originalMinutes + 15,
+      totalSeconds: 15 * 60,
       pausedDuration: 0,
     }));
   };
@@ -275,8 +277,22 @@ function App() {
       showPreFinish: false,
       showCompletion: false,
       isRunning: true,
-      startTime: prev.startTime ? prev.startTime + (minutesToAdd * 60 * 1000) : Date.now(),
-      pausedDuration: 0,
+      ...(prev.showPreFinish 
+        ? {
+            // Timer has completed - start a new segment
+            startTime: Date.now(),
+            originalMinutes: prev.originalMinutes + minutesToAdd,
+            totalSeconds: minutesToAdd * 60,
+            pausedDuration: 0,
+          }
+        : {
+            // Timer is still active - extend current session
+            startTime: prev.startTime ? prev.startTime + (minutesToAdd * 60 * 1000) : Date.now(),
+            originalMinutes: prev.originalMinutes + minutesToAdd,
+            totalSeconds: prev.totalSeconds + (minutesToAdd * 60),
+            pausedDuration: 0,
+          }
+      ),
     }));
   };
 
