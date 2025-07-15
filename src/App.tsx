@@ -84,7 +84,7 @@ function App() {
         const newTotalSeconds = Math.max(0, Math.floor(actualRemainingMs / 1000));
         
         // Update tab title regardless of visibility
-        document.title = `⏱️ ${formatTime(newTotalSeconds)} - Current`;
+        document.title = `🌊 ${formatTime(newTotalSeconds)} - Current`;
         
         // Update state
         setTimerState(prev => ({
