@@ -264,7 +264,7 @@ function App() {
       showCompletion: false,
       isRunning: true,
       startTime: Date.now(),
-      originalMinutes: prev.originalMinutes + 15,
+      originalMinutes: 15,
       totalSeconds: 15 * 60,
       pausedDuration: 0,
     }));
@@ -281,7 +281,7 @@ function App() {
         ? {
             // Timer has completed - start a new segment
             startTime: Date.now(),
-            originalMinutes: prev.originalMinutes + minutesToAdd,
+            originalMinutes: minutesToAdd,
             totalSeconds: minutesToAdd * 60,
             pausedDuration: 0,
           }
